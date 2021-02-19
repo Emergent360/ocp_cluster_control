@@ -14,7 +14,7 @@
 
   - name: get info
     ec2_instance_info:
-      region: us-east-1
+      region: "us-east-1"
       filters:
         "tag:Name": "{{ clustername }}-*"
     register: ec2info
