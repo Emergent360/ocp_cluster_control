@@ -14,7 +14,7 @@
 
   - name: get info
     ec2_instance_info:
-      region: "us-east-1"
+      region: "{{ ec2_region }}"
       filters:
         "tag:Name": "{{ clustername }}-*"
     register: ec2info
@@ -24,7 +24,7 @@
 
   - name: add tag
     ec2_tag:
-      region: us-east-1
+      region: "{{ ec2_region }}"
       resource: "{{ item }}"
       state: present
       tags:
@@ -34,7 +34,7 @@
 
   - name: remove tag
     ec2_tag:
-      region: us-east-1
+      region: "{{ ec2_region }}"
       resource: "{{ item }}"
       state: absent
       tags:
