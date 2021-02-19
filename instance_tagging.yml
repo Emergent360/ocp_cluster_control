@@ -1,0 +1,42 @@
+---
+
+- name: instance tagging
+  hosts: localhost
+  gather_facts: no
+  vars:
+    # clustername is the beginning of the Name tag field, e.g., openshift4-abcde
+    clustername: ""
+    # state = add|remove
+    state: ""
+    # the schedule name in instance scheduler
+    sched: ""
+  tasks:
+
+  - name: get info
+    ec2_instance_info:
+      filters:
+        "tag:Name": "{{ clustername }}-*"
+    register: ec2info
+
+  - set_fact:
+      instance_ids: "{{ ec2info.instances|map(attribute='instance_id')|list }}"
+
+  - name: add tag
+    ec2_tag:
+      region: us-east-1
+      resource: "{{ item }}"
+      state: present
+      tags:
+        Schedule: "{{ sched }}"
+    loop: "{{ instance_ids }}"
+    when: state == "add"
+
+  - name: remove tag
+    ec2_tag:
+      region: us-east-1
+      resource: "{{ item }}"
+      state: absent
+      tags:
+        Schedule: "{{ sched }}"
+    loop: "{{ instance_ids }}"
+    when: state == "remove"
