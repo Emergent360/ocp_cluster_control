@@ -3,13 +3,6 @@
 - name: instance tagging
   hosts: localhost
   gather_facts: no
-  vars:
-    # clustername is the beginning of the Name tag field, e.g., openshift4-abcde
-    clustername: ""
-    # state = add|remove
-    state: ""
-    # the schedule name in instance scheduler
-    sched: ""
   tasks:
 
   - name: get info
