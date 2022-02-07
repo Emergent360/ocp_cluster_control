@@ -6,7 +6,7 @@
   tasks:
 
   - name: get info
-    ec2_instance_info:
+    amazon.aws.ec2_instance_info:
       region: "{{ ec2_region }}"
       filters:
         "tag:Name": "{{ clustername }}-*"
@@ -16,7 +16,7 @@
       instance_ids: "{{ ec2info.instances|map(attribute='instance_id')|list }}"
 
   - name: add tag
-    ec2_tag:
+    amazon.aws.ec2_tag:
       region: "{{ ec2_region }}"
       resource: "{{ item }}"
       state: present
@@ -26,7 +26,7 @@
     when: state == "add"
 
   - name: remove tag
-    ec2_tag:
+    amazon.aws.ec2_tag:
       region: "{{ ec2_region }}"
       resource: "{{ item }}"
       state: absent
