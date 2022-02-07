@@ -20,7 +20,6 @@
       region: "{{ ec2_region }}"
       instance_ids: "{{ instance_ids }}"
       state: running
-      tags:
-        Schedule: "{{ sched }}"
+
 
 
