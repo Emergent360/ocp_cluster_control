@@ -1,0 +1,26 @@
+---
+
+- name: start cluster
+  hosts: localhost
+  gather_facts: no
+  tasks:
+
+  - name: get info
+    amazon.aws.ec2_instance_info:
+      region: "{{ ec2_region }}"
+      filters:
+        "tag:Name": "{{ clustername }}-*"
+    register: ec2info
+
+  - set_fact:
+      instance_ids: "{{ ec2info.instances|map(attribute='instance_id')|list }}"
+
+  - name: start instance
+    amazon.aws.ec2_instance:
+      region: "{{ ec2_region }}"
+      instance_ids: "{{ instance_ids }}"
+      state: running
+      tags:
+        Schedule: "{{ sched }}"
+
+
