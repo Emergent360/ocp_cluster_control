@@ -5,14 +5,15 @@
   gather_facts: no
   tasks:
 
-  - name: get info
+  - name: get instance information
     amazon.aws.ec2_instance_info:
       region: "{{ ec2_region }}"
       filters:
         "tag:Name": "{{ clustername }}-*"
     register: ec2info
 
-  - set_fact:
+  - name: get ids from instance information
+    ansible.builtin.set_fact:
       instance_ids: "{{ ec2info.instances|map(attribute='instance_id')|list }}"
 
   - name: start instance
